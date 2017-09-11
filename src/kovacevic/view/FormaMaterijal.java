@@ -6,13 +6,11 @@
 package kovacevic.view;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import kovacevic.controller.Obrada;
 import kovacevic.model.Materijal;
-import kovacevic.model.Rad;
 import kovacevic.pomocno.HibernateUtil;
 
 /**
@@ -308,7 +306,7 @@ public class FormaMaterijal extends Forma<Materijal> {
 
     private void btnTraziActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTraziActionPerformed
         rezultati = HibernateUtil.getSession().createQuery("from Materijal a where "
-                + " a.obrisan=false and concat(a.grupa_mateijral, ' ', a.proizvodac, ' ',a.oznaka, ' ',a.opis) like :uvjet").setString("uvjet", "%" + txtUvjet.getText() + "%").list();
+                + " a.obrisan=false and concat(a.grupa_materijal, ' ', a.proizvodac, ' ',a.oznaka, ' ',a.opis) like :uvjet").setString("uvjet", "%" + txtUvjet.getText() + "%").list();
         ucitavanje();
     }//GEN-LAST:event_btnTraziActionPerformed
 
