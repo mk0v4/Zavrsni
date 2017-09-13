@@ -126,4 +126,3 @@ insert into analiza_rad (opis_operacije, broj_operacije, jedinicni_normativ_vrem
 ('Prijenos morta','4','0.65','34.13','1','10');
 
 
-
