@@ -5,6 +5,10 @@
  */
 package kovacevic.view;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Marko Kovačević
@@ -34,8 +38,13 @@ public class Izbornik extends javax.swing.JFrame {
         btnMaterijal = new javax.swing.JButton();
         btnStavkaTroskovnik = new javax.swing.JButton();
         btnEraDijagram = new javax.swing.JButton();
+        btnAnalizaRad = new javax.swing.JButton();
+        btnRad2 = new javax.swing.JButton();
+        btnRad3 = new javax.swing.JButton();
+        lblGithub = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(400, 350));
 
         btnRad.setText("Rad");
         btnRad.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -47,6 +56,8 @@ public class Izbornik extends javax.swing.JFrame {
 
         btnMaterijal.setText("Materijal");
         btnMaterijal.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnMaterijal.setMinimumSize(new java.awt.Dimension(51, 23));
+        btnMaterijal.setPreferredSize(new java.awt.Dimension(51, 23));
         btnMaterijal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMaterijalActionPerformed(evt);
@@ -64,30 +75,81 @@ public class Izbornik extends javax.swing.JFrame {
             }
         });
 
+        btnAnalizaRad.setText("Analiza Rada");
+        btnAnalizaRad.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAnalizaRad.setMinimumSize(new java.awt.Dimension(51, 23));
+        btnAnalizaRad.setPreferredSize(new java.awt.Dimension(51, 23));
+        btnAnalizaRad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnalizaRadActionPerformed(evt);
+            }
+        });
+
+        btnRad2.setText("Analiza Materijala");
+        btnRad2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnRad2.setMinimumSize(new java.awt.Dimension(51, 23));
+        btnRad2.setPreferredSize(new java.awt.Dimension(51, 23));
+        btnRad2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRad2ActionPerformed(evt);
+            }
+        });
+
+        btnRad3.setText("Analiza cijene");
+        btnRad3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnRad3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRad3ActionPerformed(evt);
+            }
+        });
+
+        lblGithub.setText("Github");
+        lblGithub.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblGithubMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(73, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnRad, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnMaterijal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnStavkaTroskovnik, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
-                    .addComponent(btnEraDijagram))
-                .addContainerGap(75, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnAnalizaRad, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnRad2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnRad, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnMaterijal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(btnRad3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnStavkaTroskovnik, javax.swing.GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)
+                    .addComponent(btnEraDijagram, javax.swing.GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)
+                    .addComponent(lblGithub, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnRad, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRad, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAnalizaRad, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(btnMaterijal, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnMaterijal, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRad2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(btnRad3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnStavkaTroskovnik, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(btnEraDijagram, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15)
+                .addComponent(lblGithub)
                 .addContainerGap())
         );
 
@@ -107,10 +169,36 @@ public class Izbornik extends javax.swing.JFrame {
         new EraDijagram().setVisible(true);
     }//GEN-LAST:event_btnEraDijagramActionPerformed
 
+    private void btnAnalizaRadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnalizaRadActionPerformed
+        new FormaAnalizaRad().setVisible(true);
+    }//GEN-LAST:event_btnAnalizaRadActionPerformed
+
+    private void btnRad2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRad2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRad2ActionPerformed
+
+    private void btnRad3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRad3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRad3ActionPerformed
+
+    private void lblGithubMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblGithubMouseClicked
+
+        try {
+            Runtime.getRuntime().exec("cmd /c start https://github.com/mk0v4 ");
+        } catch (IOException ex) {
+            Logger.getLogger(Izbornik.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_lblGithubMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAnalizaRad;
     private javax.swing.JButton btnEraDijagram;
     private javax.swing.JButton btnMaterijal;
     private javax.swing.JButton btnRad;
+    private javax.swing.JButton btnRad2;
+    private javax.swing.JButton btnRad3;
     private javax.swing.JButton btnStavkaTroskovnik;
+    private javax.swing.JLabel lblGithub;
     // End of variables declaration//GEN-END:variables
 }

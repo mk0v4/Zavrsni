@@ -12,14 +12,15 @@ import javax.swing.JOptionPane;
 import kovacevic.controller.Obrada;
 import kovacevic.model.Rad;
 import kovacevic.pomocno.HibernateUtil;
+import org.hibernate.Session;
 
 /**
  *
  * @author Marko Kovačević
  */
 public class FormaRad extends Forma<Rad> {
-    
-    private  List<Rad> rezultati;
+
+    private List<Rad> rezultati;
 
     /**
      * Creates new form FormaRad
@@ -32,28 +33,31 @@ public class FormaRad extends Forma<Rad> {
         ucitaj();
     }
 
-        @Override
+    @Override
     protected void ucitaj() {
-
-        rezultati=HibernateUtil.getSession().createQuery("from Rad a where a.obrisan=false").list();
+        Session session=HibernateUtil.getSession();
+        session.clear();
+        rezultati = HibernateUtil.getSession().createQuery("from Rad a where a.obrisan=false").list();
         ucitavanje();
-        
+
     }
-//        DefaultListModel<Rad> m = new DefaultListModel<>();
-//        Lista.setModel(m);
-//        List<Rad> l = HibernateUtil.getSession().createQuery("from Rad a where a.obrisan=false").list();
-//        l.forEach((s) -> {
-//            System.out.println("Prije liste " + s.hashCode());
-//            m.addElement(s);
-//        });
-        
-    private void ucitavanje(){
+
+    private void ucitavanje() {
         DefaultListModel<Rad> m = new DefaultListModel<>();
-        Lista.setModel(m);
+        lista.setModel(m);
         rezultati.forEach((s) -> {
             m.addElement(s);
-        });        
-      
+
+        });
+
+    }
+
+        @Override
+    protected void spremi() {
+        entitet.setGrupa_radova(txtGrupaRadova.getText());
+        entitet.setKategorija_rad(txtKategorijaRad.getText());
+        entitet.setCijena(new BigDecimal(txtCijena.getText()));
+        super.spremi();
     }
     
     
@@ -67,7 +71,7 @@ public class FormaRad extends Forma<Rad> {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        Lista = new javax.swing.JList<>();
+        lista = new javax.swing.JList<>();
         lblGrupaRadova = new javax.swing.JLabel();
         lblKategorijaRada = new javax.swing.JLabel();
         lblCijena = new javax.swing.JLabel();
@@ -79,18 +83,22 @@ public class FormaRad extends Forma<Rad> {
         btnObrisi = new javax.swing.JButton();
         txtUvjet = new javax.swing.JTextField();
         btnTrazi = new javax.swing.JButton();
+        lblPretraga = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(795, 400));
+        setSize(new java.awt.Dimension(0, 0));
 
-        Lista.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        Lista.setToolTipText("");
-        Lista.setDropMode(javax.swing.DropMode.INSERT);
-        Lista.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+        lista.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lista.setToolTipText("");
+        lista.setDropMode(javax.swing.DropMode.INSERT);
+        lista.setMaximumSize(new java.awt.Dimension(1000, 1000));
+        lista.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                ListaValueChanged(evt);
+                listaValueChanged(evt);
             }
         });
-        jScrollPane1.setViewportView(Lista);
+        jScrollPane1.setViewportView(lista);
 
         lblGrupaRadova.setText("Grupa radova:");
 
@@ -138,63 +146,76 @@ public class FormaRad extends Forma<Rad> {
             }
         });
 
+        lblPretraga.setText("Pretraga po grupi i kategoriji:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtUvjet, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnTrazi))
-                    .addComponent(jScrollPane1))
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblGrupaRadova)
-                    .addComponent(lblKategorijaRada)
-                    .addComponent(lblCijena))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtGrupaRadova)
-                    .addComponent(txtKategorijaRad)
-                    .addComponent(txtCijena)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnDodaj)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-                        .addComponent(btnPromjeni))
-                    .addComponent(btnObrisi))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtUvjet, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnTrazi))
+                            .addComponent(jScrollPane1))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblGrupaRadova)
+                                .addGap(18, 18, 18))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblKategorijaRada)
+                                    .addComponent(lblCijena))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtKategorijaRad)
+                            .addComponent(txtCijena)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnDodaj)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnPromjeni)
+                                .addGap(18, 18, Short.MAX_VALUE)
+                                .addComponent(btnObrisi)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(txtGrupaRadova)))
+                    .addComponent(lblPretraga))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(lblPretraga)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtUvjet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnTrazi))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblGrupaRadova)
-                            .addComponent(txtGrupaRadova, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                            .addComponent(txtGrupaRadova, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblGrupaRadova))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblKategorijaRada)
-                            .addComponent(txtKategorijaRad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                            .addComponent(txtKategorijaRad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblKategorijaRada))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblCijena)
-                            .addComponent(txtCijena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                            .addComponent(txtCijena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblCijena))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnDodaj)
-                            .addComponent(btnPromjeni))
-                        .addGap(80, 80, 80)
-                        .addComponent(btnObrisi)))
+                            .addComponent(btnPromjeni)
+                            .addComponent(btnObrisi))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -202,45 +223,38 @@ public class FormaRad extends Forma<Rad> {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void ListaValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_ListaValueChanged
+    private void listaValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listaValueChanged
 
-        if (evt.getValueIsAdjusting()){
+        if (evt.getValueIsAdjusting()) {
             return;
         }
-        
+
         try {
-           this.entitet=Lista.getSelectedValue();
-            txtGrupaRadova.setText(Lista.getSelectedValue().getGrupa_radova());
-            txtKategorijaRad.setText(Lista.getSelectedValue().getKategorija_rad());
-            txtCijena.setText(Lista.getSelectedValue().getCijena().toString());
+            this.entitet = lista.getSelectedValue();
+            txtGrupaRadova.setText(lista.getSelectedValue().getGrupa_radova());
+            txtKategorijaRad.setText(lista.getSelectedValue().getKategorija_rad());
+            txtCijena.setText(lista.getSelectedValue().getCijena().toString());
         } catch (Exception e) {
         }
-        
-    }//GEN-LAST:event_ListaValueChanged
+
+    }//GEN-LAST:event_listaValueChanged
 
     private void btnDodajActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDodajActionPerformed
         entitet = new Rad();
         spremi();
-        //lstRadovi.clearSelection();
     }//GEN-LAST:event_btnDodajActionPerformed
 
     private void btnPromjeniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPromjeniActionPerformed
- if(Lista.getSelectedValue()==null){
+        if (lista.getSelectedValue() == null) {
             JOptionPane.showConfirmDialog(rootPane, "Prvo odaberite stavku");
         }
         spremi();
-       //lstRadovi.clearSelection();
+
     }//GEN-LAST:event_btnPromjeniActionPerformed
-    @Override
-    protected void spremi(){
-        entitet.setGrupa_radova(txtGrupaRadova.getText());
-        entitet.setKategorija_rad(txtKategorijaRad.getText());
-        entitet.setCijena(new BigDecimal(txtCijena.getText()));
-        super.spremi();
-    }
+
 
     private void btnObrisiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnObrisiActionPerformed
- if(Lista.getSelectedValue()==null){
+        if (lista.getSelectedValue() == null) {
             JOptionPane.showConfirmDialog(rootPane, "Prvo odaberite stavku");
         }
         obrisi();
@@ -251,8 +265,8 @@ public class FormaRad extends Forma<Rad> {
     }//GEN-LAST:event_txtUvjetActionPerformed
 
     private void btnTraziActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTraziActionPerformed
-        rezultati=HibernateUtil.getSession().createQuery("from Rad a where "
-            + " a.obrisan=false and concat(a.grupa_radova, ' ', a.kategorija_rad) like :uvjet").setString("uvjet", "%" + txtUvjet.getText() + "%").list();
+        rezultati = HibernateUtil.getSession().createQuery("from Rad a where "
+                + " a.obrisan=false and concat(a.grupa_radova, ' ', a.kategorija_rad) like :uvjet").setString("uvjet", "%" + txtUvjet.getText() + "%").list();
         ucitavanje();
     }//GEN-LAST:event_btnTraziActionPerformed
 
@@ -261,7 +275,6 @@ public class FormaRad extends Forma<Rad> {
     }//GEN-LAST:event_txtGrupaRadovaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JList<Rad> Lista;
     private javax.swing.JButton btnDodaj;
     private javax.swing.JButton btnObrisi;
     private javax.swing.JButton btnPromjeni;
@@ -270,6 +283,8 @@ public class FormaRad extends Forma<Rad> {
     private javax.swing.JLabel lblCijena;
     private javax.swing.JLabel lblGrupaRadova;
     private javax.swing.JLabel lblKategorijaRada;
+    private javax.swing.JLabel lblPretraga;
+    private javax.swing.JList<Rad> lista;
     private javax.swing.JTextField txtCijena;
     private javax.swing.JTextField txtGrupaRadova;
     private javax.swing.JTextField txtKategorijaRad;

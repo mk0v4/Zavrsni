@@ -7,6 +7,7 @@ package kovacevic.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Iterator;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -95,9 +96,18 @@ public class Materijal extends Entitet implements Serializable {
         this.analize_materijala = analize_materijala;
     }
     
+    
+    
+   
         @Override
     public String toString() {
-        return grupa_materijal + " " + oznaka + " " + kolicina_ambalaza + " " + jedinica_mjere_ambalaza + " " + cijena_ambalaza + " kn";
+        String i;
+        if (proizvodac.isEmpty()) {
+              i = "";
+        } else {
+            i = ", ";
+        }
+        return  grupa_materijal + i + proizvodac + ", " + oznaka + ", " + kolicina_ambalaza + ", " + jedinica_mjere_ambalaza + ", " + cijena_ambalaza + " kn";
     }
     
 }

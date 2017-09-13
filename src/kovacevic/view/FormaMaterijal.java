@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 import kovacevic.controller.Obrada;
 import kovacevic.model.Materijal;
 import kovacevic.pomocno.HibernateUtil;
+import org.hibernate.Session;
 
 /**
  *
@@ -34,28 +35,34 @@ public class FormaMaterijal extends Forma<Materijal> {
 
     @Override
     protected void ucitaj() {
-
+        Session session=HibernateUtil.getSession();
+        session.clear();
         rezultati = HibernateUtil.getSession().createQuery("from Materijal a where a.obrisan=false").list();
         ucitavanje();
 
-//        DefaultListModel<Materijal> m = new DefaultListModel<>();
-//        Lista.setModel(m);
-//        List<Materijal> l = HibernateUtil.getSession().createQuery("from Matrijal a where a.obrisan=false").list();
-//        l.forEach((s) -> {
-//            System.out.println("Prije liste " + s.hashCode());
-//            m.addElement(s);
-//        });
     }
 
     private void ucitavanje() {
         DefaultListModel<Materijal> m = new DefaultListModel<>();
-        Lista.setModel(m);
+        lista.setModel(m);
         rezultati.forEach((s) -> {
             m.addElement(s);
         });
 
     }
 
+    @Override
+    protected void spremi() {
+        entitet.setGrupa_materijal(txtGrupaMaterijal.getText());
+        entitet.setProizvodac(txtProizvodac.getText());
+        entitet.setOznaka(txtOznaka.getText());
+        entitet.setKolicina_ambalaza(new BigDecimal(txtKolicinaAmbalaza.getText()));
+        entitet.setJedinica_mjere_ambalaza(txtJedinicaMjereAmbalaza.getText());
+        entitet.setCijena_ambalaza(new BigDecimal(txtCijenaAmbalaza.getText()));
+        entitet.setOpis(tarOpis.getText());
+        super.spremi();
+    }   
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -66,7 +73,7 @@ public class FormaMaterijal extends Forma<Materijal> {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        Lista = new javax.swing.JList<>();
+        lista = new javax.swing.JList<>();
         lblGrupaMaterijal = new javax.swing.JLabel();
         txtGrupaMaterijal = new javax.swing.JTextField();
         lblProizvodac = new javax.swing.JLabel();
@@ -87,18 +94,24 @@ public class FormaMaterijal extends Forma<Materijal> {
         btnTrazi = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tarOpis = new javax.swing.JTextArea();
+        lblPretraga = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(850, 420));
+        setPreferredSize(new java.awt.Dimension(450, 333));
 
-        Lista.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        Lista.setToolTipText("");
-        Lista.setDropMode(javax.swing.DropMode.INSERT);
-        Lista.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(400, 200));
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(300, 200));
+
+        lista.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lista.setToolTipText("");
+        lista.setDropMode(javax.swing.DropMode.INSERT);
+        lista.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                ListaValueChanged(evt);
+                listaValueChanged(evt);
             }
         });
-        jScrollPane1.setViewportView(Lista);
+        jScrollPane1.setViewportView(lista);
 
         lblGrupaMaterijal.setText("Grupa materijala:");
 
@@ -154,21 +167,23 @@ public class FormaMaterijal extends Forma<Materijal> {
         jScrollPane2.setViewportView(tarOpis);
         tarOpis.setLineWrap(true);
 
+        lblPretraga.setText("Pretraga po grupi materijala, proizvođaču i oznaci:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(txtUvjet)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnTrazi))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 378, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(txtUvjet)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnTrazi))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblGrupaMaterijal)
                             .addComponent(lblProizvodac)
@@ -179,69 +194,71 @@ public class FormaMaterijal extends Forma<Materijal> {
                             .addComponent(lblOpis))
                         .addGap(21, 21, 21)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtGrupaMaterijal)
-                            .addComponent(txtProizvodac)
-                            .addComponent(txtOznaka)
-                            .addComponent(txtKolicinaAmbalaza)
-                            .addComponent(txtJedinicaMjereAmbalaza)
-                            .addComponent(txtCijenaAmbalaza)
-                            .addComponent(jScrollPane2))
-                        .addContainerGap())
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtCijenaAmbalaza, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtJedinicaMjereAmbalaza, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtKolicinaAmbalaza, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtOznaka, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtProizvodac, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtGrupaMaterijal, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(btnDodaj)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnPromjeni)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnObrisi))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addComponent(btnDodaj)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnPromjeni)
-                        .addGap(18, 68, Short.MAX_VALUE)
-                        .addComponent(btnObrisi)
-                        .addGap(10, 10, 10))))
+                        .addComponent(lblPretraga)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(12, 12, 12)
+                .addComponent(lblPretraga)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtUvjet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnTrazi))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblGrupaMaterijal)
                             .addComponent(txtGrupaMaterijal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblProizvodac)
                             .addComponent(txtProizvodac, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblOznaka)
                             .addComponent(txtOznaka, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblKolicinaAmbalaza)
                             .addComponent(txtKolicinaAmbalaza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblJedinicaMjereAmbalaza)
                             .addComponent(txtJedinicaMjereAmbalaza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblCijenaAmbalaza)
                             .addComponent(txtCijenaAmbalaza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(lblOpis)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jScrollPane2))
-                        .addGap(18, 18, 18)
+                                .addGap(10, 10, 10))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnDodaj)
                             .addComponent(btnPromjeni)
-                            .addComponent(btnObrisi))))
+                            .addComponent(btnObrisi)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -249,52 +266,40 @@ public class FormaMaterijal extends Forma<Materijal> {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void ListaValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_ListaValueChanged
+    private void listaValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listaValueChanged
 
         if (evt.getValueIsAdjusting()) {
             return;
         }
 
         try {
-            this.entitet = Lista.getSelectedValue();
-            txtGrupaMaterijal.setText(Lista.getSelectedValue().getGrupa_materijal());
-            txtProizvodac.setText(Lista.getSelectedValue().getProizvodac());
-            txtOznaka.setText(Lista.getSelectedValue().getOznaka());
-            txtKolicinaAmbalaza.setText(Lista.getSelectedValue().getKolicina_ambalaza().toString());
-            txtJedinicaMjereAmbalaza.setText(Lista.getSelectedValue().getJedinica_mjere_ambalaza());
-            txtCijenaAmbalaza.setText(Lista.getSelectedValue().getCijena_ambalaza().toString());
-            tarOpis.setText(Lista.getSelectedValue().getOpis());
+            this.entitet = lista.getSelectedValue();
+            txtGrupaMaterijal.setText(lista.getSelectedValue().getGrupa_materijal());
+            txtProizvodac.setText(lista.getSelectedValue().getProizvodac());
+            txtOznaka.setText(lista.getSelectedValue().getOznaka());
+            txtKolicinaAmbalaza.setText(lista.getSelectedValue().getKolicina_ambalaza().toString());
+            txtJedinicaMjereAmbalaza.setText(lista.getSelectedValue().getJedinica_mjere_ambalaza());
+            txtCijenaAmbalaza.setText(lista.getSelectedValue().getCijena_ambalaza().toString());
+            tarOpis.setText(lista.getSelectedValue().getOpis());
         } catch (Exception e) {
         }
 
-    }//GEN-LAST:event_ListaValueChanged
+    }//GEN-LAST:event_listaValueChanged
 
     private void btnDodajActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDodajActionPerformed
         entitet = new Materijal();
         spremi();
-        //lstRadovi.clearSelection();
     }//GEN-LAST:event_btnDodajActionPerformed
 
     private void btnPromjeniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPromjeniActionPerformed
-        if (Lista.getSelectedValue() == null) {
+        if (lista.getSelectedValue() == null) {
             JOptionPane.showConfirmDialog(rootPane, "Prvo odaberite stavku");
         }
         spremi();
-        //lstRadovi.clearSelection();
     }//GEN-LAST:event_btnPromjeniActionPerformed
-    @Override
-    protected void spremi() {
-        entitet.setGrupa_materijal(txtGrupaMaterijal.getText());
-        entitet.setProizvodac(txtProizvodac.getText());
-        entitet.setOznaka(txtOznaka.getText());
-        entitet.setKolicina_ambalaza(new BigDecimal(txtKolicinaAmbalaza.getText()));
-        entitet.setJedinica_mjere_ambalaza(txtJedinicaMjereAmbalaza.getText());
-        entitet.setCijena_ambalaza(new BigDecimal(txtCijenaAmbalaza.getText()));
-        entitet.setOpis(tarOpis.getText());
-        super.spremi();
-    }
+
     private void btnObrisiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnObrisiActionPerformed
-        if (Lista.getSelectedValue() == null) {
+        if (lista.getSelectedValue() == null) {
             JOptionPane.showConfirmDialog(rootPane, "Prvo odaberite stavku");
         }
         obrisi();
@@ -306,12 +311,11 @@ public class FormaMaterijal extends Forma<Materijal> {
 
     private void btnTraziActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTraziActionPerformed
         rezultati = HibernateUtil.getSession().createQuery("from Materijal a where "
-                + " a.obrisan=false and concat(a.grupa_materijal, ' ', a.proizvodac, ' ',a.oznaka, ' ',a.opis) like :uvjet").setString("uvjet", "%" + txtUvjet.getText() + "%").list();
+                + " a.obrisan=false and concat(a.grupa_materijal, ' ', a.proizvodac, ' ',a.oznaka, ' ') like :uvjet").setString("uvjet", "%" + txtUvjet.getText() + "%").list();
         ucitavanje();
     }//GEN-LAST:event_btnTraziActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JList<Materijal> Lista;
     private javax.swing.JButton btnDodaj;
     private javax.swing.JButton btnObrisi;
     private javax.swing.JButton btnPromjeni;
@@ -324,7 +328,9 @@ public class FormaMaterijal extends Forma<Materijal> {
     private javax.swing.JLabel lblKolicinaAmbalaza;
     private javax.swing.JLabel lblOpis;
     private javax.swing.JLabel lblOznaka;
+    private javax.swing.JLabel lblPretraga;
     private javax.swing.JLabel lblProizvodac;
+    private javax.swing.JList<Materijal> lista;
     private javax.swing.JTextArea tarOpis;
     private javax.swing.JTextField txtCijenaAmbalaza;
     private javax.swing.JTextField txtGrupaMaterijal;

@@ -6,8 +6,6 @@
 package kovacevic;
 
 import kovacevic.pomocno.HibernateUtil;
-import kovacevic.view.FormaRad;
-import kovacevic.view.FormaMaterijal;
 import kovacevic.view.Izbornik;
 /**
  *
