@@ -19,25 +19,25 @@ import javax.persistence.Table;
 @Table
 public class AnalizaRad extends Entitet implements Serializable {
 
-    private String opsis_operacije;
+    private String opis_operacije;
 
-    private Byte broj_operacije;
+    private int broj_operacije;
 
     private BigDecimal jedinicni_normativ_vremena, cijena_vrijeme;
 
-    public String getOpsis_operacije() {
-        return opsis_operacije;
+    public String getOpis_operacije() {
+        return opis_operacije;
     }
 
-    public void setOpsis_operacije(String opsis_operacije) {
-        this.opsis_operacije = opsis_operacije;
+    public void setOpis_operacije(String opis_operacije) {
+        this.opis_operacije = opis_operacije;
     }
 
-    public Byte getBroj_operacije() {
+    public int getBroj_operacije() {
         return broj_operacije;
     }
 
-    public void setBroj_operacije(Byte broj_operacije) {
+    public void setBroj_operacije(int broj_operacije) {
         this.broj_operacije = broj_operacije;
     }
 
@@ -79,6 +79,9 @@ public class AnalizaRad extends Entitet implements Serializable {
         this.analiza_cijene = analiza_cijene;
     }
     
-    
+    @Override
+    public String toString(){
+        return analiza_cijene.getOznaka_norme() + ", " + broj_operacije + ", " + opis_operacije + ", " + rad.getGrupa_radova() + " " + rad.getKategorija_rad();
+    }
     
 }

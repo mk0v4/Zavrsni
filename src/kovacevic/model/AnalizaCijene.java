@@ -130,5 +130,9 @@ public class AnalizaCijene extends Entitet implements Serializable {
         this.analize_materijala = analize_materijala;
     }
 
+        @Override
+    public String toString(){
+        return getOznaka_norme();
+    }
     
 }

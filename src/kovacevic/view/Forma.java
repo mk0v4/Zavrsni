@@ -29,7 +29,7 @@ public abstract class Forma<T extends Entitet> extends JFrame  {
     }
     
     protected  void spremi(){
-        obrada.save(entitet);
+        entitet=obrada.save(entitet);
         ucitaj();
     }
     

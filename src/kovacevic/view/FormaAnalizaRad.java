@@ -7,20 +7,22 @@ package kovacevic.view;
 
 import java.math.BigDecimal;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import kovacevic.controller.Obrada;
+import kovacevic.model.AnalizaCijene;
+import kovacevic.model.AnalizaRad;
 import kovacevic.model.Rad;
 import kovacevic.pomocno.HibernateUtil;
-import org.hibernate.Session;
 
 /**
  *
  * @author Marko Kovačević
  */
-public class FormaAnalizaRad extends Forma<Rad> {
+public class FormaAnalizaRad extends Forma<AnalizaRad> {
 
-    private List<Rad> rezultati;
+    private List<AnalizaRad> analizaRad;
 
     /**
      * Creates new form FormaRad
@@ -31,35 +33,26 @@ public class FormaAnalizaRad extends Forma<Rad> {
         obrada = new Obrada();
 
         ucitaj();
+        ucitajAnalizaCijene();
+        ucitajRad();
     }
+    
+
+        
 
     @Override
     protected void ucitaj() {
-        Session session=HibernateUtil.getSession();
-        session.clear();
-        rezultati = HibernateUtil.getSession().createQuery("from Rad a where a.obrisan=false").list();
-        ucitavanje();
-
-    }
-
-    private void ucitavanje() {
-        DefaultListModel<Rad> m = new DefaultListModel<>();
-        lista.setModel(m);
-        rezultati.forEach((s) -> {
+        DefaultListModel<AnalizaRad> m = new DefaultListModel<>();
+        lstAnalizaRada.setModel(m);
+        analizaRad = HibernateUtil.getSession().createQuery("from AnalizaRad a where a.obrisan=false").list();
+        analizaRad.forEach((s) -> {
             m.addElement(s);
-
         });
+        
 
     }
 
-        @Override
-    protected void spremi() {
-        entitet.setGrupa_radova(txtOpisOperacije.getText());
-        entitet.setKategorija_rad(txtBrojOperacije.getText());
-        entitet.setCijena(new BigDecimal(txtJedinicniNormativVremena.getText()));
-        super.spremi();
-    }
-    
+  
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -71,7 +64,7 @@ public class FormaAnalizaRad extends Forma<Rad> {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        lista = new javax.swing.JList<>();
+        lstAnalizaRada = new javax.swing.JList<>();
         lblOpisOperacije = new javax.swing.JLabel();
         lblBrojOperacije = new javax.swing.JLabel();
         lblJedinicniNormativVremena = new javax.swing.JLabel();
@@ -83,12 +76,8 @@ public class FormaAnalizaRad extends Forma<Rad> {
         btnObrisi = new javax.swing.JButton();
         lblBrupaRadova = new javax.swing.JLabel();
         lblOznakaNorme = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        lblGrupaNormi = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jComboBox3 = new javax.swing.JComboBox<>();
-        lblBrupaRadova1 = new javax.swing.JLabel();
-        jComboBox4 = new javax.swing.JComboBox<>();
+        cmbOznakaNorme = new javax.swing.JComboBox<>();
+        cmbGrupaRadova = new javax.swing.JComboBox<>();
         lblCijenaRada = new javax.swing.JLabel();
         txtCijenaVrijeme = new javax.swing.JTextField();
 
@@ -96,16 +85,16 @@ public class FormaAnalizaRad extends Forma<Rad> {
         setMinimumSize(new java.awt.Dimension(795, 400));
         setSize(new java.awt.Dimension(0, 0));
 
-        lista.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        lista.setToolTipText("");
-        lista.setDropMode(javax.swing.DropMode.INSERT);
-        lista.setMaximumSize(new java.awt.Dimension(1000, 1000));
-        lista.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+        lstAnalizaRada.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstAnalizaRada.setToolTipText("");
+        lstAnalizaRada.setDropMode(javax.swing.DropMode.INSERT);
+        lstAnalizaRada.setMaximumSize(new java.awt.Dimension(1000, 1000));
+        lstAnalizaRada.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                listaValueChanged(evt);
+                lstAnalizaRadaValueChanged(evt);
             }
         });
-        jScrollPane1.setViewportView(lista);
+        jScrollPane1.setViewportView(lstAnalizaRada);
 
         lblOpisOperacije.setText("Opis operacije:");
 
@@ -114,16 +103,12 @@ public class FormaAnalizaRad extends Forma<Rad> {
         lblJedinicniNormativVremena.setText("Normativ vremena:");
         lblJedinicniNormativVremena.setToolTipText("");
 
-        txtOpisOperacije.setText("Strojno spravljanje morta");
         txtOpisOperacije.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtOpisOperacijeActionPerformed(evt);
             }
         });
 
-        txtBrojOperacije.setText("1");
-
-        txtJedinicniNormativVremena.setText("0.60");
         txtJedinicniNormativVremena.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtJedinicniNormativVremenaActionPerformed(evt);
@@ -156,23 +141,15 @@ public class FormaAnalizaRad extends Forma<Rad> {
 
         lblOznakaNorme.setText("Oznaka norme:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "GN 301-203-3.1.", "GN 301-103-5.3." }));
-
-        lblGrupaNormi.setText("Grupa normi:");
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "GN 301 (Zidarski radovi)", "GN 361 (Krovopokrivački radovi)" }));
-
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Radnik", "Zidar", "Tesar" }));
-
-        lblBrupaRadova1.setText("Kategorija rada:");
-        lblBrupaRadova1.setToolTipText("");
-
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "II", "III", "IV", "V", "VI", "VII", "VIII", "I" }));
+        cmbOznakaNorme.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbOznakaNormeActionPerformed(evt);
+            }
+        });
 
         lblCijenaRada.setText("Cijena rada:");
         lblCijenaRada.setToolTipText("");
 
-        txtCijenaVrijeme.setText("31.50 (rad * normativ vremena)");
         txtCijenaVrijeme.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCijenaVrijemeActionPerformed(evt);
@@ -188,10 +165,8 @@ public class FormaAnalizaRad extends Forma<Rad> {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 378, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblGrupaNormi)
                     .addComponent(lblOznakaNorme)
                     .addComponent(lblBrupaRadova)
-                    .addComponent(lblBrupaRadova1)
                     .addComponent(lblOpisOperacije)
                     .addComponent(lblBrojOperacije)
                     .addComponent(lblJedinicniNormativVremena)
@@ -202,10 +177,8 @@ public class FormaAnalizaRad extends Forma<Rad> {
                     .addComponent(txtJedinicniNormativVremena)
                     .addComponent(txtBrojOperacije)
                     .addComponent(txtOpisOperacije)
-                    .addComponent(jComboBox4, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cmbGrupaRadova, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cmbOznakaNorme, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnDodaj)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -218,85 +191,69 @@ public class FormaAnalizaRad extends Forma<Rad> {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblGrupaNormi))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblOznakaNorme))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblBrupaRadova)
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblBrupaRadova1)
-                    .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(45, 45, 45)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtBrojOperacije, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblBrojOperacije))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtOpisOperacije, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblOpisOperacije))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtJedinicniNormativVremena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblJedinicniNormativVremena))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtCijenaVrijeme, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblCijenaRada))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnDodaj)
-                    .addComponent(btnPromjeni)
-                    .addComponent(btnObrisi))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cmbOznakaNorme, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblOznakaNorme))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblBrupaRadova)
+                            .addComponent(cmbGrupaRadova, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(97, 97, 97)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtBrojOperacije, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblBrojOperacije))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtOpisOperacije, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblOpisOperacije))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtJedinicniNormativVremena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblJedinicniNormativVremena))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtCijenaVrijeme, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblCijenaRada))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnDodaj)
+                            .addComponent(btnPromjeni)
+                            .addComponent(btnObrisi)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void listaValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listaValueChanged
-
-        if (evt.getValueIsAdjusting()) {
-            return;
-        }
-
-        try {
-            this.entitet = lista.getSelectedValue();
-            txtOpisOperacije.setText(lista.getSelectedValue().getGrupa_radova());
-            txtBrojOperacije.setText(lista.getSelectedValue().getKategorija_rad());
-            txtJedinicniNormativVremena.setText(lista.getSelectedValue().getCijena().toString());
-        } catch (Exception e) {
-        }
-
-    }//GEN-LAST:event_listaValueChanged
-
     private void btnDodajActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDodajActionPerformed
-        entitet = new Rad();
+        entitet = new AnalizaRad();
         spremi();
     }//GEN-LAST:event_btnDodajActionPerformed
 
     private void btnPromjeniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPromjeniActionPerformed
-        if (lista.getSelectedValue() == null) {
+        if (lstAnalizaRada.getSelectedValue() == null) {
             JOptionPane.showConfirmDialog(rootPane, "Prvo odaberite stavku");
         }
         spremi();
 
     }//GEN-LAST:event_btnPromjeniActionPerformed
-
+        @Override
+    protected void spremi() {
+        entitet.setOpis_operacije(txtOpisOperacije.getText());
+        entitet.setBroj_operacije(Integer.parseInt(txtBrojOperacije.getText()));
+        entitet.setJedinicni_normativ_vremena(new BigDecimal(txtJedinicniNormativVremena.getText()));
+        entitet.setCijena_vrijeme(new BigDecimal(txtCijenaVrijeme.getText()));
+        entitet.setAnaliza_cijene((AnalizaCijene)cmbOznakaNorme.getSelectedItem());
+        entitet.setRad((Rad)cmbGrupaRadova.getSelectedItem());
+        super.spremi();
+    }
 
     private void btnObrisiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnObrisiActionPerformed
-        if (lista.getSelectedValue() == null) {
+        if (lstAnalizaRada.getSelectedValue() == null) {
             JOptionPane.showConfirmDialog(rootPane, "Prvo odaberite stavku");
         }
         obrisi();
@@ -314,27 +271,76 @@ public class FormaAnalizaRad extends Forma<Rad> {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCijenaVrijemeActionPerformed
 
+    private void lstAnalizaRadaValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstAnalizaRadaValueChanged
+
+        if (evt.getValueIsAdjusting()) {
+            return;
+        }
+
+        try {
+            this.entitet = lstAnalizaRada.getSelectedValue();
+            txtOpisOperacije.setText(lstAnalizaRada.getSelectedValue().getOpis_operacije());
+            txtBrojOperacije.setText(String.valueOf(lstAnalizaRada.getSelectedValue().getBroj_operacije()));
+            txtJedinicniNormativVremena.setText(lstAnalizaRada.getSelectedValue().getJedinicni_normativ_vremena().toString());
+            txtCijenaVrijeme.setText(lstAnalizaRada.getSelectedValue().getCijena_vrijeme().toString());
+            cmbOznakaNorme.setSelectedItem(entitet.getAnaliza_cijene().getOznaka_norme());
+            cmbGrupaRadova.setSelectedItem(entitet.getRad().getGrupa_radova());
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_lstAnalizaRadaValueChanged
+
+    private void cmbOznakaNormeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbOznakaNormeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbOznakaNormeActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDodaj;
     private javax.swing.JButton btnObrisi;
     private javax.swing.JButton btnPromjeni;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JComboBox<String> jComboBox4;
+    private javax.swing.JComboBox<Rad> cmbGrupaRadova;
+    private javax.swing.JComboBox<AnalizaCijene> cmbOznakaNorme;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblBrojOperacije;
     private javax.swing.JLabel lblBrupaRadova;
-    private javax.swing.JLabel lblBrupaRadova1;
     private javax.swing.JLabel lblCijenaRada;
-    private javax.swing.JLabel lblGrupaNormi;
     private javax.swing.JLabel lblJedinicniNormativVremena;
     private javax.swing.JLabel lblOpisOperacije;
     private javax.swing.JLabel lblOznakaNorme;
-    private javax.swing.JList<Rad> lista;
+    private javax.swing.JList<AnalizaRad> lstAnalizaRada;
     private javax.swing.JTextField txtBrojOperacije;
     private javax.swing.JTextField txtCijenaVrijeme;
     private javax.swing.JTextField txtJedinicniNormativVremena;
     private javax.swing.JTextField txtOpisOperacije;
     // End of variables declaration//GEN-END:variables
+
+    private void ucitajAnalizaCijene(){
+        DefaultComboBoxModel<AnalizaCijene> m = new DefaultComboBoxModel<>();
+        cmbOznakaNorme.setModel(m);
+        List<AnalizaCijene> oznakaNorme = HibernateUtil.getSession().
+                createQuery("from AnalizaCijene a where "
+                        + "a.obrisan=false  ").list();
+
+        for (AnalizaCijene p : oznakaNorme) {
+
+            m.addElement(p);
+            cmbOznakaNorme.setSelectedItem(p);
+        
+        }
+
+    }
+    
+        private void ucitajRad(){
+        DefaultComboBoxModel<Rad> m = new DefaultComboBoxModel<>();
+        cmbGrupaRadova.setModel(m);
+        List<Rad> rad = HibernateUtil.getSession().createQuery("from Rad a where " + "a.obrisan=false  ").list();
+
+        for (Rad p : rad) {
+
+            m.addElement(p);
+            cmbGrupaRadova.setSelectedItem(p);
+        
+        }
+
+    }
+    
 }
