@@ -20,14 +20,14 @@ import kovacevic.pomocno.HibernateUtil;
  *
  * @author Marko Kovačević
  */
-public class FormaAnalizaRad extends Forma<AnalizaRad> {
+public class FormaAnalizaMaterijal extends Forma<AnalizaRad> {
 
     private List<AnalizaRad> analizaRad;
 
     /**
      * Creates new form FormaRad
      */
-    public FormaAnalizaRad() {
+    public FormaAnalizaMaterijal() {
         initComponents();
         setTitle("Analiza Rada");
         obrada = new Obrada();
@@ -55,7 +55,7 @@ public class FormaAnalizaRad extends Forma<AnalizaRad> {
     @Override
     protected void ucitaj() {
         DefaultListModel<AnalizaRad> m = new DefaultListModel<>();
-        lstAnalizaRada.setModel(m);
+        lstAnalizaMaterijala.setModel(m);
         analizaRad = HibernateUtil.getSession().createQuery("from AnalizaRad a where a.obrisan=false").list();
         analizaRad.forEach((s) -> {
             m.addElement(s);
@@ -73,7 +73,7 @@ public class FormaAnalizaRad extends Forma<AnalizaRad> {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstAnalizaRada = new javax.swing.JList<>();
+        lstAnalizaMaterijala = new javax.swing.JList<>();
         lblOpisOperacije = new javax.swing.JLabel();
         lblBrojOperacije = new javax.swing.JLabel();
         lblJedinicniNormativVremena = new javax.swing.JLabel();
@@ -97,16 +97,16 @@ public class FormaAnalizaRad extends Forma<AnalizaRad> {
         setMinimumSize(new java.awt.Dimension(795, 400));
         setSize(new java.awt.Dimension(0, 0));
 
-        lstAnalizaRada.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        lstAnalizaRada.setToolTipText("");
-        lstAnalizaRada.setDropMode(javax.swing.DropMode.INSERT);
-        lstAnalizaRada.setMaximumSize(new java.awt.Dimension(1000, 1000));
-        lstAnalizaRada.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+        lstAnalizaMaterijala.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstAnalizaMaterijala.setToolTipText("");
+        lstAnalizaMaterijala.setDropMode(javax.swing.DropMode.INSERT);
+        lstAnalizaMaterijala.setMaximumSize(new java.awt.Dimension(1000, 1000));
+        lstAnalizaMaterijala.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                lstAnalizaRadaValueChanged(evt);
+                lstAnalizaMaterijalaValueChanged(evt);
             }
         });
-        jScrollPane1.setViewportView(lstAnalizaRada);
+        jScrollPane1.setViewportView(lstAnalizaMaterijala);
 
         lblOpisOperacije.setText("Opis operacije:");
 
@@ -271,7 +271,7 @@ public class FormaAnalizaRad extends Forma<AnalizaRad> {
     }//GEN-LAST:event_btnDodajActionPerformed
 
     private void btnPromjeniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPromjeniActionPerformed
-        if (lstAnalizaRada.getSelectedValue() == null) {
+        if (lstAnalizaMaterijala.getSelectedValue() == null) {
             JOptionPane.showConfirmDialog(rootPane, "Prvo odaberite stavku");
         }
         spremi();
@@ -290,7 +290,7 @@ public class FormaAnalizaRad extends Forma<AnalizaRad> {
     }
 
     private void btnObrisiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnObrisiActionPerformed
-        if (lstAnalizaRada.getSelectedValue() == null) {
+        if (lstAnalizaMaterijala.getSelectedValue() == null) {
             JOptionPane.showConfirmDialog(rootPane, "Prvo odaberite stavku");
         }
         obrisi();
@@ -308,18 +308,18 @@ public class FormaAnalizaRad extends Forma<AnalizaRad> {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCijenaVrijemeActionPerformed
 
-    private void lstAnalizaRadaValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstAnalizaRadaValueChanged
+    private void lstAnalizaMaterijalaValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstAnalizaMaterijalaValueChanged
 
         if (evt.getValueIsAdjusting()) {
             return;
         }
 
         try {
-            this.entitet = lstAnalizaRada.getSelectedValue();
-            txtOpisOperacije.setText(lstAnalizaRada.getSelectedValue().getOpis_operacije());
-            txtBrojOperacije.setText(String.valueOf(lstAnalizaRada.getSelectedValue().getBroj_operacije()));
-            txtJedinicniNormativVremena.setText(lstAnalizaRada.getSelectedValue().getJedinicni_normativ_vremena().toString());
-            txtCijenaVrijeme.setText(lstAnalizaRada.getSelectedValue().getCijena_vrijeme().toString());
+            this.entitet = lstAnalizaMaterijala.getSelectedValue();
+            txtOpisOperacije.setText(lstAnalizaMaterijala.getSelectedValue().getOpis_operacije());
+            txtBrojOperacije.setText(String.valueOf(lstAnalizaMaterijala.getSelectedValue().getBroj_operacije()));
+            txtJedinicniNormativVremena.setText(lstAnalizaMaterijala.getSelectedValue().getJedinicni_normativ_vremena().toString());
+            txtCijenaVrijeme.setText(lstAnalizaMaterijala.getSelectedValue().getCijena_vrijeme().toString());
             cmbOznakaNorme.setSelectedItem(entitet.getAnaliza_cijene());
             cmbGrupaRadova.setSelectedItem(entitet.getRad());
             tarOpisNorme.setText(entitet.getAnaliza_cijene().getOpis());
@@ -327,7 +327,7 @@ public class FormaAnalizaRad extends Forma<AnalizaRad> {
         } catch (Exception e) {
         }
         repaint();
-    }//GEN-LAST:event_lstAnalizaRadaValueChanged
+    }//GEN-LAST:event_lstAnalizaMaterijalaValueChanged
 
     private void cmbOznakaNormeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbOznakaNormeActionPerformed
         // TODO add your handling code here:
@@ -352,7 +352,7 @@ public class FormaAnalizaRad extends Forma<AnalizaRad> {
     private javax.swing.JLabel lblJedinicniNormativVremena;
     private javax.swing.JLabel lblOpisOperacije;
     private javax.swing.JLabel lblOznakaNorme;
-    private javax.swing.JList<AnalizaRad> lstAnalizaRada;
+    private javax.swing.JList<AnalizaMaterijal> lstAnalizaMaterijala;
     private javax.swing.JTextArea tarOpisNorme;
     private javax.swing.JTextField txtBrojOperacije;
     private javax.swing.JTextField txtCijenaVrijeme;
