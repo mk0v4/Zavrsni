@@ -32,7 +32,7 @@
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="btnAnalizaRad" alignment="0" max="32767" attributes="0"/>
-                          <Component id="btnRad2" alignment="0" max="32767" attributes="0"/>
+                          <Component id="btnAnalizaMaterijal" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -40,7 +40,7 @@
                           <Component id="btnMaterijal" alignment="1" max="32767" attributes="0"/>
                       </Group>
                   </Group>
-                  <Component id="btnRad3" alignment="0" max="32767" attributes="0"/>
+                  <Component id="btnAnalizaCijene" alignment="0" max="32767" attributes="0"/>
                   <Component id="btnStavkaTroskovnik" alignment="0" pref="312" max="32767" attributes="0"/>
                   <Component id="btnEraDijagram" alignment="0" pref="312" max="32767" attributes="0"/>
                   <Component id="lblGithub" alignment="1" min="-2" max="-2" attributes="0"/>
@@ -60,10 +60,10 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnMaterijal" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
-                  <Component id="btnRad2" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                  <Component id="btnAnalizaMaterijal" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="btnRad3" min="-2" pref="40" max="-2" attributes="0"/>
+              <Component id="btnAnalizaCijene" min="-2" pref="40" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="btnStavkaTroskovnik" min="-2" pref="40" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -105,6 +105,9 @@
         <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;center&gt;Stavka&lt;br&gt;Tro&#x161;kovnika&lt;/center&gt;&lt;/html&gt;"/>
         <Property name="horizontalTextPosition" type="int" value="0"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnStavkaTroskovnikActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnEraDijagram">
       <Properties>
@@ -130,7 +133,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAnalizaRadActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btnRad2">
+    <Component class="javax.swing.JButton" name="btnAnalizaMaterijal">
       <Properties>
         <Property name="text" type="java.lang.String" value="Analiza Materijala"/>
         <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -142,16 +145,16 @@
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRad2ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAnalizaMaterijalActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btnRad3">
+    <Component class="javax.swing.JButton" name="btnAnalizaCijene">
       <Properties>
         <Property name="text" type="java.lang.String" value="Analiza cijene"/>
         <Property name="horizontalTextPosition" type="int" value="0"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRad3ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAnalizaCijeneActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="lblGithub">
