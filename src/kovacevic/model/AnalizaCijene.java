@@ -132,7 +132,7 @@ public class AnalizaCijene extends Entitet implements Serializable {
 
         @Override
     public String toString(){
-        return getOznaka_norme();
+        return getOznaka_norme() + ", " + getGrupa_norme() + ", " + getOpis();
     }
     
 }

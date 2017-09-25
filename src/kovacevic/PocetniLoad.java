@@ -185,6 +185,7 @@ public class PocetniLoad {
 
         Obrada<StavkaTroskovnik> obradaStavkeTroskovnika = new Obrada<>();
         StavkaTroskovnik stavkaTroskovnik = new StavkaTroskovnik();
+        stavkaTroskovnik.setOznaka_stavka("1.");
         stavkaTroskovnik.setKolicina_troskovnik(new BigDecimal(30.52));
         stavkaTroskovnik.setDodatan_opis("Početka radova nakon odobrenja nadzornog inženjera.");
         stavkaTroskovnik.setUkupna_cijena(new BigDecimal(21886.50));
@@ -235,7 +236,7 @@ public class PocetniLoad {
         analizaMaterijal1.setJedinicna_cijena_materijal(new BigDecimal(324.00));
         analizaMaterijal1.setCijena_materijal(new BigDecimal(100.44));
         analizaMaterijal1.setAnaliza_cijene(analizaCijene1);
-        analizaMaterijal.setMaterijal(materijal1);
+        analizaMaterijal1.setMaterijal(materijal1);
         obradaAnalizeMaterijala.save(analizaMaterijal1);
         
         AnalizaMaterijal analizaMaterijal2 = new AnalizaMaterijal();
@@ -244,7 +245,7 @@ public class PocetniLoad {
         analizaMaterijal2.setJedinicna_cijena_materijal(new BigDecimal(90.00));
         analizaMaterijal2.setCijena_materijal(new BigDecimal(83.70));
         analizaMaterijal2.setAnaliza_cijene(analizaCijene1);
-        analizaMaterijal.setMaterijal(materijal2);
+        analizaMaterijal2.setMaterijal(materijal2);
         obradaAnalizeMaterijala.save(analizaMaterijal2);
         
         AnalizaMaterijal analizaMaterijal3 = new AnalizaMaterijal();
@@ -253,7 +254,7 @@ public class PocetniLoad {
         analizaMaterijal3.setJedinicna_cijena_materijal(new BigDecimal(15.00));
         analizaMaterijal3.setCijena_materijal(new BigDecimal(3.60));
         analizaMaterijal3.setAnaliza_cijene(analizaCijene1);
-        analizaMaterijal.setMaterijal(materijal3);
+        analizaMaterijal3.setMaterijal(materijal3);
         obradaAnalizeMaterijala.save(analizaMaterijal3);         
         
         AnalizaMaterijal analizaMaterijal4 = new AnalizaMaterijal();
@@ -262,7 +263,7 @@ public class PocetniLoad {
         analizaMaterijal4.setJedinicna_cijena_materijal(new BigDecimal(0.28));
         analizaMaterijal4.setCijena_materijal(new BigDecimal(77.00));
         analizaMaterijal4.setAnaliza_cijene(analizaCijene);
-        analizaMaterijal.setMaterijal(materijal4);
+        analizaMaterijal4.setMaterijal(materijal4);
         obradaAnalizeMaterijala.save(analizaMaterijal4);        
 
         AnalizaMaterijal analizaMaterijal5 = new AnalizaMaterijal();
@@ -271,7 +272,7 @@ public class PocetniLoad {
         analizaMaterijal5.setJedinicna_cijena_materijal(new BigDecimal(304.54));
         analizaMaterijal5.setCijena_materijal(new BigDecimal(97.45));
         analizaMaterijal5.setAnaliza_cijene(analizaCijene);
-        analizaMaterijal.setMaterijal(materijal5);
+        analizaMaterijal5.setMaterijal(materijal5);
         obradaAnalizeMaterijala.save(analizaMaterijal5);         
         
         

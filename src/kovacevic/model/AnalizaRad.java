@@ -81,7 +81,7 @@ public class AnalizaRad extends Entitet implements Serializable {
     
     @Override
     public String toString(){
-        return analiza_cijene.getOznaka_norme() + ", " + broj_operacije + ", " + opis_operacije + ", " + rad.getGrupa_radova() + " " + rad.getKategorija_rad();
+        return /*analiza_cijene.getOznaka_norme() + ", " +*/ broj_operacije + ", " + opis_operacije + ", " + rad.getGrupa_radova() + " " + rad.getKategorija_rad() + ", " + getJedinicni_normativ_vremena() + " h, " + getCijena_vrijeme() + " kn/h";
     }
     
 }

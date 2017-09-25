@@ -22,7 +22,7 @@ import kovacevic.pomocno.HibernateUtil;
  */
 public class FormaAnalizaRad extends Forma<AnalizaRad> {
 
-    private List<AnalizaRad> analizaRad;
+    private List<AnalizaRad> analizaRada;
 
     /**
      * Creates new form FormaRad
@@ -56,8 +56,8 @@ public class FormaAnalizaRad extends Forma<AnalizaRad> {
     protected void ucitaj() {
         DefaultListModel<AnalizaRad> m = new DefaultListModel<>();
         lstAnalizaRada.setModel(m);
-        analizaRad = HibernateUtil.getSession().createQuery("from AnalizaRad a where a.obrisan=false").list();
-        analizaRad.forEach((s) -> {
+        analizaRada = HibernateUtil.getSession().createQuery("from AnalizaRad a where a.obrisan=false").list();
+        analizaRada.forEach((s) -> {
             m.addElement(s);
         });
 
@@ -92,10 +92,16 @@ public class FormaAnalizaRad extends Forma<AnalizaRad> {
         jScrollPane2 = new javax.swing.JScrollPane();
         tarOpisNorme = new javax.swing.JTextArea();
         lblBrupaRadova1 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(795, 400));
+        setMinimumSize(new java.awt.Dimension(895, 400));
+        setPreferredSize(new java.awt.Dimension(885, 292));
         setSize(new java.awt.Dimension(0, 0));
+
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(450, 23));
+        jScrollPane1.setName(""); // NOI18N
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(450, 130));
 
         lstAnalizaRada.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstAnalizaRada.setToolTipText("");
@@ -186,13 +192,15 @@ public class FormaAnalizaRad extends Forma<AnalizaRad> {
         lblBrupaRadova1.setText("Opis norme:");
         lblBrupaRadova1.setToolTipText("");
 
+        jLabel1.setText("cijena iz grupe radova * normativ vremena");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblOznakaNorme)
@@ -215,8 +223,10 @@ public class FormaAnalizaRad extends Forma<AnalizaRad> {
                         .addComponent(btnDodaj)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnPromjeni)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                         .addComponent(btnObrisi)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -240,7 +250,7 @@ public class FormaAnalizaRad extends Forma<AnalizaRad> {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtBrojOperacije, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblBrojOperacije))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtOpisOperacije, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblOpisOperacije))
@@ -251,7 +261,8 @@ public class FormaAnalizaRad extends Forma<AnalizaRad> {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtCijenaVrijeme, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblCijenaRada))
+                            .addComponent(lblCijenaRada)
+                            .addComponent(jLabel1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnDodaj)
@@ -343,6 +354,7 @@ public class FormaAnalizaRad extends Forma<AnalizaRad> {
     private javax.swing.JButton btnPromjeni;
     private javax.swing.JComboBox<Rad> cmbGrupaRadova;
     private javax.swing.JComboBox<AnalizaCijene> cmbOznakaNorme;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblBrojOperacije;

@@ -20,7 +20,15 @@ import javax.persistence.Table;
 @Table
 public class StavkaTroskovnik extends Entitet implements Serializable {
 
-    private String dodatan_opis;
+    private String dodatan_opis, oznaka_stavka;
+
+    public String getOznaka_stavka() {
+        return oznaka_stavka;
+    }
+
+    public void setOznaka_stavka(String oznaka_stavka) {
+        this.oznaka_stavka = oznaka_stavka;
+    }
 
     private BigDecimal kolicina_troskovnik, ukupna_cijena;
 
@@ -59,4 +67,9 @@ public class StavkaTroskovnik extends Entitet implements Serializable {
         this.ukupna_cijena = ukupna_cijena;
     }
 
+    @Override
+    public String toString() {
+        return getOznaka_stavka();
+    }
+    
 }

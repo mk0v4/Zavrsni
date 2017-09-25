@@ -78,6 +78,9 @@ public class AnalizaMaterijal extends Entitet implements Serializable {
         this.analiza_cijene = analiza_cijene;
     }
     
-    
+    @Override
+    public String toString() {
+        return /*analiza_cijene.getOznaka_norme() + ", " + */materijal.getGrupa_materijal() + ", " + materijal.getOznaka() + ", " + getKolicina() + " " + getJedinica_mjere()  + ", Iznos: " + getCijena_materijal() +" kn"; 
+    }
     
 }
